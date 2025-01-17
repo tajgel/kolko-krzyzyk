@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+import Board from "./Board.tsx"
 
-type Square = {
-  id: string;
-  clicked: boolean;
-  text: string;
-};
 
 function App() {
+
+  type Square = {
+    id: string;
+    clicked: boolean;
+    text: string;
+  };
+
   const tempSquares: Square[] = Array.from({ length: 9 }, (_, i) => ({
     id: i.toString(),
     clicked: false,
@@ -17,7 +20,11 @@ function App() {
   const [squares, setSquares] = useState<Square[]>(tempSquares);
   const [squaresContent, setSquaresContent] = useState<string[]>()
   const [checked, setChecked] = useState<boolean>(false);
-
+  const [gameMode, setGamemode] = useState<"" | "bot" | "human">("")
+  const [difficulty, setDifficulty] = useState<"" | "easy" | "medium" | "hard" | "impossible">("")
+  
+  console.log("Gamemode ", gameMode)
+  console.log("Difficulty ", difficulty)
   function resetSquares() {
     setSquares(tempSquares);
     setChecked(false);
@@ -49,6 +56,8 @@ function App() {
       resetSquares()
     }
   }
+
+  
 
   function checkForWinner(squares: Square[]) {
     const winningPositions = [
@@ -89,19 +98,30 @@ function App() {
 
   return (
     <div id="App">
-      <button onClick={resetSquares}>Reset</button>
-      <div id="siatka">
-        {squares.map((square) => (
-          <div
-            key={square.id}
-            data-id={square.id}
-            className="square"
-            onClick={handleClick}
-          >
-            {square.text}
-          </div>
-        ))}
-      </div>
+      {gameMode !== "" ? 
+      (
+        <>
+          {gameMode === "bot" && difficulty === "" && (
+            <>
+              <div onClick={() => setDifficulty("easy")}>Easy</div>
+              <div onClick={() => setDifficulty("medium")}>Medium</div>
+              <div onClick={() => setDifficulty("hard")}>Hard</div>
+              <div onClick={() => setDifficulty("impossible")}>Impossible</div>
+            </>
+          )}
+          {((gameMode === "human") || (gameMode === "bot" && difficulty !== "")) && (
+            <>
+              <Board squares={squares} handleClick={handleClick} />
+            </>
+          )}
+        </>
+      ) : 
+      (
+        <>
+          <div onClick={() => setGamemode("bot")}>Bot</div>
+          <div onClick={() => setGamemode("human")}>Human</div>
+        </>
+      )}
     </div>
   );
 }
