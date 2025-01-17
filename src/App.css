@@ -2,6 +2,7 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Faculty Glyphic", serif;;
 }
 
 #siatka{
@@ -11,12 +12,20 @@ body{
 }
 
 .square{
+  border-radius: 20%;
+  
+  transition: 0.7s;
   display: flex;
   width: 100px;
   height: 100px;
-  background-color: red;
+  background-color: rgb(230, 230, 230);
   justify-content: center;
   align-items: center;
   font-size: 5rem;
   -webkit-user-select: none;
+}
+
+.square:hover{
+  transition: 0.7s;
+  background-color: rgb(116, 116, 116);
 }
